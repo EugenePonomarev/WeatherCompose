@@ -128,11 +128,17 @@ Runtime flow uses **EasyPermissions** with fallback to App Settings when denied.
 
 ```mermaid
 flowchart LR
-    A[MainActivity (Compose)] -- collect StateFlow --> B[ViewModel]
-    B -- Flow<WeatherData> --> C[ActivityRepositoryImpl]
-    C -- Retrofit.execute() --> D[(OpenWeatherMap)]
+    A["MainActivity - Compose host"]
+    B["MainActivityViewModel (StateFlow<BaseState>)"]
+    C["ActivityRepositoryImpl (Flow<WeatherData>)"]
+    D["OpenWeatherMap /weather"]
+    E["WeatherScreen: gradients, icons, cards"]
+
+    A -->|collect state| B
+    B --> C
+    C -->|Retrofit (execute)| D
     D --> C --> B --> A
-    A --> UI[WeatherScreen: gradients, icons, cards]
+    A -->|"Render UI"| E
 ```
 
 ---
